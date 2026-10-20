@@ -124,6 +124,7 @@ h1{font-size:3.2rem}
 
 </main>
 <script src="config.js"></script>
+<script>CONFIG.SUPABASE_URL=(CONFIG.SUPABASE_URL||"").trim().replace(/\/+$/,"").replace(/\/(rest|auth)\/v1.*$/,"");CONFIG.SUPABASE_ANON_KEY=(CONFIG.SUPABASE_ANON_KEY||"").trim();</script>
 <script>
 var TUTOR_EMAIL = CONFIG.TUTOR_EMAIL;
 var T={
