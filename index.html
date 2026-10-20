@@ -256,7 +256,7 @@ function drawCal(){
   var y=calMonth.getFullYear(), m=calMonth.getMonth(), first=calMonth.getDay(), n=new Date(y,m+1,0).getDate();
   for(var i=0;i<first;i++)grid.appendChild(document.createElement("span"));
   for(let d=1;d<=n;d++){
-    var ds=y+"-"+pad(m+1)+"-"+pad(d), b=document.createElement("button");
+    let ds=y+"-"+pad(m+1)+"-"+pad(d), b=document.createElement("button");
     b.type="button";b.className="cd"+(availFor(ds).length?" has":"");b.textContent=d;
     b.setAttribute("aria-pressed",ds===calDay?"true":"false");
     if(ds<dateEl.min)b.disabled=true;
