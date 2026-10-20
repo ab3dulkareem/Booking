@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rabbaniyoon Academy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=Noto+Naskh+Arabic:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#EEF3F6;--surface:#fff;--ink:#14213D;--muted:#5B6678;--line:#CFD8E0;--accent:#F2A900;--on-accent:#14213D;--taken:#E3E8ED;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1626;--surface:#18223A;--ink:#EEF3F6;--muted:#9AA7BD;--line:#2B3856;--taken:#202B45}}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.5}
+main{max-width:560px;margin:0 auto;padding:28px 18px 48px}
+h1{font-size:2.4rem;line-height:1.05;font-weight:800;margin:0 0 10px;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0 0 28px;max-width:44ch}
+h2{font-size:1.05rem;font-weight:600;margin:26px 0 10px}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
+.day,.slot{font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:10px;cursor:pointer}
+.day{flex:0 0 auto;min-width:66px;padding:10px 8px;text-align:center}
+.day b{display:block;font-size:1.3rem}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.slot{padding:12px 4px}
+.slot[disabled]{background:var(--taken);color:var(--muted);text-decoration:line-through;cursor:not-allowed}
+.day[aria-pressed=true],.slot[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+label{display:block;font-size:.9rem;margin:14px 0 4px;color:var(--muted)}
+input,select{width:100%;font:inherit;padding:12px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.go{width:100%;margin-top:24px;padding:15px;font:inherit;font-weight:800;font-size:1.05rem;border:0;border-radius:12px;background:#517561;color:#fff;cursor:pointer}
+.go[disabled]{opacity:.45;cursor:not-allowed}
+.err{color:#C0392B;min-height:1.2em;margin:8px 0 0;font-size:.9rem}
+.ok{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:22px}
+.ok h2{margin-top:0;font-size:1.5rem}
+.ok a,.ok button{display:inline-block;margin:6px 8px 0 0;padding:11px 14px;border-radius:10px;font:inherit;font-weight:600;text-decoration:none;border:1.5px solid var(--ink);background:none;color:var(--ink);cursor:pointer}
+.row{background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}.row b,.row span{display:block}.row span{color:var(--muted);font-size:.9rem}
+.row a{display:inline-block;margin:8px 8px 0 0;padding:6px 12px;border-radius:8px;border:1.5px solid var(--line);color:var(--ink);text-decoration:none}
+.row button{margin-top:8px;font:inherit;padding:6px 12px;border-radius:8px;border:1.5px solid var(--line);background:none;color:var(--ink);cursor:pointer}
+.chead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:600}
+.chead button{width:44px;height:36px;font:inherit;font-size:1.2rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cgrid>span{font-size:.8rem;color:var(--muted)}
+.cd{aspect-ratio:1;border-radius:8px;border:1.5px solid transparent;background:var(--surface);font:inherit;color:var(--ink);position:relative;cursor:pointer;padding:0}
+.cd[disabled]{opacity:.35;cursor:default}
+.cd.has::after{content:"";position:absolute;bottom:5px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--accent)}
+.cd[aria-pressed=true]{border-color:var(--ink);font-weight:800}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chips .slot{padding:10px 16px}
+.hint{color:var(--muted);margin:12px 0 0;font-size:.95rem}
+.oadd{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.oadd input{flex:1 1 130px;width:auto}
+.oadd button,.orow button{font:inherit;padding:8px 12px;border-radius:10px;border:1.5px solid var(--ink);background:none;color:var(--ink);cursor:pointer}
+.orow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+.brand{font-size:1.5rem;font-weight:800;margin:0 0 14px;line-height:1.2}
+html[lang=ar] .brand{line-height:1.9;font-weight:700}
+.lang{display:block;margin:0 0 12px;margin-inline-start:auto;font-family:"Noto Naskh Arabic",system-ui,sans-serif;font-size:1rem;padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+html[lang=ar] body{font-family:"Noto Naskh Arabic",system-ui,sans-serif;line-height:1.75}
+html[lang=ar] h1{letter-spacing:0;line-height:1.3}
+input[type=tel],input[type=email],input[type=password]{direction:ltr}
+[dir=rtl] input[type=tel],[dir=rtl] input[type=email]{text-align:right}
+[dir=rtl] .ok a,[dir=rtl] .ok button{margin:6px 0 0 8px}
+[dir=rtl] .row a{margin:8px 0 0 8px}
+.alt{display:block;width:100%;margin-top:10px;padding:13px;font:inherit;font-weight:600;border-radius:12px;border:1.5px solid var(--ink);background:none;color:var(--ink);cursor:pointer}
+#bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:18px 0 0;color:var(--muted);font-size:.9rem}
+#bar .alt{width:auto;margin:0;padding:6px 12px;font-weight:400}
+.mrow{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:8px}
+.mrow button{font:inherit;padding:6px 12px;border-radius:8px;border:1.5px solid var(--line);background:none;color:var(--ink);cursor:pointer}
+.cgrid{max-width:460px}
+@media (min-width:900px){
+main{max-width:1040px;padding-top:40px}
+h1{font-size:3.2rem}
+.cols{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:start}
+.colR{background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:8px 26px 28px;position:sticky;top:20px}
+.colR h2:first-child{margin-top:18px}
+.colR input,.colR select{background:var(--bg)}
+#done{max-width:560px}
+}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<button id="lang" type="button" class="lang">العربية</button>
+<section id="form">
+<p class="brand" data-i18n="brand">Rabbaniyoon Academy</p>
+<h1 data-i18n="title">Book a class</h1>
+<p class="sub" data-i18n="sub">Live one-on-one lessons in Quran and targeted study. Choose any date and time that suits you.</p>
+<div class="cols"><div class="colL">
+<h2 data-i18n="avail">Available classes</h2>
+<div id="cal"></div>
+<div id="opens"></div>
+<h2 data-i18n="own">Or choose your own time</h2>
+<label for="date" data-i18n="date">Date</label>
+<input id="date" type="date">
+<label for="time" data-i18n="time">Time</label>
+<input id="time" type="time">
+</div><div class="colR">
+<div id="bookFields"><h2 data-i18n="formT">Your details</h2>
+<label for="name" data-i18n="name">Your name</label>
+<input id="name" autocomplete="name">
+<label for="email" data-i18n="email">Email</label>
+<input id="email" type="email" autocomplete="email">
+<label for="phone" data-i18n="phone">Phone number (with country code)</label>
+<input id="phone" type="tel" autocomplete="tel" placeholder="+44 7700 900123">
+<label for="topic" data-i18n="topicL">What do you want to study?</label>
+<select id="topic">
+<option value="Quran" data-i18n="optQ">Quran</option><option value="Targeted lessons" data-i18n="optT">Targeted lessons</option>
+</select>
+<label for="focus" data-i18n="focusL">Anything specific? (optional)</label>
+<input id="focus" data-i18n-ph="focusPh" placeholder="For example: recitation, memorization, a particular surah">
+<p class="err" id="err" role="alert"></p>
+<button class="go" id="go" data-i18n="go">Book this class</button>
+</div>
+</div></div>
+</section>
+<section id="done" class="ok" hidden>
+<h2 data-i18n="booked">Class booked</h2>
+<p id="sum"></p>
+<p data-i18n="doneP">Your time is reserved. Send a confirmation email so you get the meeting link in the reply.</p>
+<a id="mail" href="#" data-i18n="mail">Email confirmation</a>
+<button id="again" data-i18n="again">Book another</button>
+<button id="cancel" hidden data-i18n="cancel">Cancel this class</button>
+</section>
+
+</main>
+<script src="config.js"></script>
+<script>
+var TUTOR_EMAIL = CONFIG.TUTOR_EMAIL;
+var T={
+en:{formT:"Your details",eMany0:"",authT:"Sign in to book",pw:"Password",signIn:"Sign in",signUp:"Create account",signOut:"Sign out",signedAs:"Signed in as",eAuth:"Wrong email or password.",eSignUp:"Could not create the account. Try another email or password.",ePw:"Password must be at least 6 characters.",checkMail:"Check your email to confirm your account, then sign in.",mineT:"My classes",noMine:"No upcoming classes.",cancelC:"Cancel",sure:"Tap again to confirm",eMany:"This email already has 5 upcoming classes. Please contact us to change one.",brand:"Rabbaniyoon Academy",title:"Book a class",sub:"Live one-on-one lessons in Quran and targeted study. Choose any date and time that suits you.",avail:"Available classes",own:"Or choose your own time",date:"Date",time:"Time",name:"Your name",email:"Email",phone:"Phone number (with country code)",topicL:"What do you want to study?",optQ:"Quran",optT:"Targeted lessons",focusL:"Anything specific? (optional)",focusPh:"For example: recitation, memorization, a particular surah",go:"Book this class",booking:"Booking…",booked:"Class booked",doneP:"Your time is reserved. Send a confirmation email so you get the meeting link in the reply.",mail:"Email confirmation",again:"Book another",cancel:"Cancel this class",sum:"{n}, your class is booked for {w}: {t}.",at:"at",eDT:"Choose a date and a time.",eFut:"Choose a date and time in the future.",eName:"Enter your name.",eEmail:"Enter a valid email address.",ePhone:"Enter a phone number we can reach you on.",eClash:"That time overlaps another class. Choose a time at least 45 minutes apart.",eTaken:"Someone just took that time. Choose another one.",eSave:"Could not save the booking. Check your connection and try again.",eCancel:"Could not cancel. Try again.",prevM:"Previous month",nextM:"Next month",dow:["S","M","T","W","T","F","S"],hNone:"No open times listed yet. Choose your own time below.",hPick:"Days with a dot have open classes. Tap a day to see the times.",hDay:"No open times on this day. Pick another day or choose your own time below."},
+ar:{formT:"بياناتك",eMany0:"",authT:"سجّل الدخول للحجز",pw:"كلمة المرور",signIn:"تسجيل الدخول",signUp:"إنشاء حساب",signOut:"تسجيل الخروج",signedAs:"تم الدخول باسم",eAuth:"البريد الإلكتروني أو كلمة المرور غير صحيحة.",eSignUp:"تعذر إنشاء الحساب. جرّب بريدًا أو كلمة مرور أخرى.",ePw:"يجب ألا تقل كلمة المرور عن 6 أحرف.",checkMail:"تحقق من بريدك الإلكتروني لتأكيد حسابك ثم سجّل الدخول.",mineT:"حصصي",noMine:"لا توجد حصص قادمة.",cancelC:"إلغاء",sure:"اضغط مرة أخرى للتأكيد",eMany:"هذا البريد لديه 5 حصص قادمة. تواصل معنا لتعديل إحداها.",brand:"أكاديمية رَبَّانِيُّون",title:"احجز حصة",sub:"حصص مباشرة فردية في القرآن الكريم والدراسة المستهدفة. اختر أي تاريخ ووقت يناسبك.",avail:"الحصص المتاحة",own:"أو اختر وقتك الخاص",date:"التاريخ",time:"الوقت",name:"اسمك",email:"البريد الإلكتروني",phone:"رقم الهاتف (مع رمز الدولة)",topicL:"ماذا تريد أن تدرس؟",optQ:"القرآن الكريم",optT:"دروس مستهدفة",focusL:"هل لديك طلب محدد؟ (اختياري)",focusPh:"مثال: التلاوة، الحفظ، سورة معينة",go:"احجز هذه الحصة",booking:"جارٍ الحجز…",booked:"تم حجز الحصة",doneP:"تم حجز وقتك. أرسل رسالة تأكيد بالبريد الإلكتروني ليصلك رابط الاجتماع في الرد.",mail:"أرسل تأكيدًا بالبريد",again:"احجز حصة أخرى",cancel:"إلغاء هذه الحصة",sum:"{n}، تم حجز حصتك {w}: {t}.",at:"الساعة",eDT:"اختر التاريخ والوقت.",eFut:"اختر تاريخًا ووقتًا في المستقبل.",eName:"أدخل اسمك.",eEmail:"أدخل بريدًا إلكترونيًا صحيحًا.",ePhone:"أدخل رقم هاتف يمكننا التواصل معك عليه.",eClash:"هذا الوقت يتداخل مع حصة أخرى. اختر وقتًا بفارق 45 دقيقة على الأقل.",eTaken:"تم حجز هذا الوقت للتو. اختر وقتًا آخر.",eSave:"تعذر حفظ الحجز. تحقق من اتصالك وحاول مرة أخرى.",eCancel:"تعذر الإلغاء. حاول مرة أخرى.",prevM:"الشهر السابق",nextM:"الشهر التالي",dow:["ح","ن","ث","ر","خ","ج","س"],hNone:"لا توجد أوقات متاحة حاليًا. اختر وقتك الخاص أدناه.",hPick:"الأيام التي عليها نقطة فيها حصص متاحة. اضغط على يوم لعرض الأوقات.",hDay:"لا توجد أوقات متاحة في هذا اليوم. اختر يومًا آخر أو اختر وقتك الخاص أدناه."}
+};
+var lang="en";
+try{var sv=localStorage.getItem("lang");lang=sv||((navigator.language||"").slice(0,2)==="ar"?"ar":"en");}catch(e){}
+var cur=null;
+function tr(k){return T[lang][k];}
+function loc(){return lang==="ar"?"ar-u-nu-latn":"en";}
+function sumText(){
+  var w=new Intl.DateTimeFormat(loc(),{weekday:"long",month:"long",day:"numeric"}).format(parseDate(cur.date))+" "+tr("at")+" "+cur.time;
+  var tp=T[lang][cur.topic==="Quran"?"optQ":"optT"]+(cur.focus?" ("+cur.focus+")":"");
+  return tr("sum").replace("{n}",cur.name).replace("{w}",w).replace("{t}",tp);
+}
+function applyLang(){
+  var h=document.documentElement;h.lang=lang;h.dir=lang==="ar"?"rtl":"ltr";
+  document.title=tr("brand")+" – "+tr("title");
+  [].forEach.call(document.querySelectorAll("[data-i18n]"),function(e){e.textContent=tr(e.getAttribute("data-i18n"));});
+  [].forEach.call(document.querySelectorAll("[data-i18n-ph]"),function(e){e.placeholder=tr(e.getAttribute("data-i18n-ph"));});
+  document.getElementById("lang").textContent=lang==="ar"?"English":"العربية";
+  errEl.textContent="";
+  try{localStorage.setItem("lang",lang);}catch(e){}
+  if(cur&&!document.getElementById("done").hidden)document.getElementById("sum").textContent=sumText();
+  drawCal();
+}
+document.getElementById("lang").onclick=function(){lang=lang==="ar"?"en":"ar";applyLang();};
+var LESSON_MIN = 45;
+var errEl=document.getElementById("err"), goBtn=document.getElementById("go"), dateEl=document.getElementById("date");
+var taken={}, last=null, db=CONFIG.SUPABASE_URL.indexOf("YOUR-")<0;
+var fmtLong=new Intl.DateTimeFormat("en",{weekday:"long",month:"long",day:"numeric"});
+
+function pad(n){return (n<10?"0":"")+n;}
+var now=new Date();
+dateEl.min=now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate());
+function slotKey(date,time){return date+"_"+time.replace(":","");}
+function mins(t){var p=t.split(":");return +p[0]*60+ +p[1];}
+function keyMins(k){var t=k.split("_")[1];return +t.slice(0,2)*60+ +t.slice(2,4);}
+function clash(date,time){
+  var m=mins(time);
+  return Object.keys(taken).some(function(k){return k.indexOf(date+"_")===0&&Math.abs(keyMins(k)-m)<LESSON_MIN;});
+}
+function parseDate(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+
+function showDone(name,email,topic,when){
+  document.getElementById("sum").textContent=sumText();
+  var body="Hi, I booked a class.\n\nName: "+name+"\nEmail: "+email+"\nPhone: "+document.getElementById("phone").value.trim()+"\nWhen: "+when+"\nTopic: "+topic;
+  document.getElementById("mail").href="mailto:"+TUTOR_EMAIL+"?subject="+encodeURIComponent("Class booked: "+when)+"&body="+encodeURIComponent(body);
+  document.getElementById("cancel").hidden=!last;
+  document.getElementById("form").hidden=true;document.getElementById("done").hidden=false;window.scrollTo(0,0);
+}
+
+goBtn.onclick=async function(){
+  var name=document.getElementById("name").value.trim(), email=document.getElementById("email").value.trim();
+  var date=dateEl.value, time=document.getElementById("time").value;
+  var focus=document.getElementById("focus").value.trim();
+  var phone=document.getElementById("phone").value.trim();
+  var topic=document.getElementById("topic").value+(focus?" ("+focus+")":"");
+  if(!date||!time){errEl.textContent=tr("eDT");return;}
+  var start=new Date(date+"T"+time);
+  if(isNaN(start)||start<=new Date()){errEl.textContent=tr("eFut");return;}
+  if(!name){errEl.textContent=tr("eName");return;}
+  if(!/^\S+@\S+\.\S+$/.test(email)){errEl.textContent=tr("eEmail");return;}
+  if(phone.replace(/\D/g,"").length<7){errEl.textContent=tr("ePhone");return;}
+  errEl.textContent="";
+  var when=fmtLong.format(parseDate(date))+" at "+time;
+  cur={name:name,date:date,time:time,topic:document.getElementById("topic").value,focus:focus};
+  if(!db){showDone(name,email,topic,when);return;}
+  if(clash(date,time)){errEl.textContent=tr("eClash");return;}
+  goBtn.disabled=true;goBtn.textContent=tr("booking");
+  try{
+    var id=await api("rpc/book_class",{method:"POST",body:{p_name:name,p_email:email,p_phone:phone,p_topic:document.getElementById("topic").value,p_focus:focus,p_start:start.toISOString(),p_tz:Intl.DateTimeFormat().resolvedOptions().timeZone,p_lang:lang}});
+    last={id:id};
+    await load().catch(function(){});
+    showDone(name,email,topic,when);
+  }catch(e){
+    if((e.message||"").indexOf("slot_taken")>=0){await load().catch(function(){});errEl.textContent=tr("eTaken");}
+    else if((e.message||"").indexOf("too_many")>=0)errEl.textContent=tr("eMany");
+    else errEl.textContent=tr("eSave");
+  }
+  goBtn.disabled=false;goBtn.textContent=tr("go");
+};
+document.getElementById("again").onclick=function(){
+  last=null;document.getElementById("form").hidden=false;document.getElementById("done").hidden=true;
+};
+
+async function api(path,o){
+  o=o||{};
+  var r=await fetch(CONFIG.SUPABASE_URL+"/rest/v1/"+path,{method:o.method||"GET",headers:{apikey:CONFIG.SUPABASE_ANON_KEY,Authorization:"Bearer "+CONFIG.SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:o.body?JSON.stringify(o.body):undefined});
+  var t=await r.text(),j=null;try{j=JSON.parse(t);}catch(e){}
+  if(!r.ok)throw new Error((j&&j.message)||"error");
+  return j;
+}
+function localKey(iso){var d=new Date(iso);return {date:d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()),time:pad(d.getHours())+":"+pad(d.getMinutes())};}
+async function load(){
+  var r=await Promise.all([api("taken_slots?select=starts_at"),api("open_times?select=starts_at&starts_at=gt."+encodeURIComponent(new Date().toISOString()))]);
+  taken={};r[0].forEach(function(x){var k=localKey(x.starts_at);taken[slotKey(k.date,k.time)]=true;});
+  open={};r[1].forEach(function(x){var k=localKey(x.starts_at);open[slotKey(k.date,k.time)]={date:k.date,time:k.time};});
+  drawCal();
+}
+document.getElementById("cancel").onclick=async function(){
+  if(!last||!db)return;
+  try{
+    await api("rpc/cancel_booking",{method:"POST",body:{p_id:last.id}});
+    await load().catch(function(){});
+    document.getElementById("again").onclick();
+  }catch(e){document.getElementById("sum").textContent=tr("eCancel");}
+};
+
+var open={}, calMonth=new Date(now.getFullYear(),now.getMonth(),1), calDay="", pickedKey="";
+var fmtMonth=new Intl.DateTimeFormat("en",{month:"long",year:"numeric"});
+function availFor(date){
+  return Object.keys(open).filter(function(k){var v=open[k];
+    return v.date===date&&!taken[k]&&!clash(v.date,v.time)&&new Date(v.date+"T"+v.time)>new Date();
+  }).sort().map(function(k){return {key:k,date:open[k].date,time:open[k].time};});
+}
+function drawCal(){
+  var el=document.getElementById("cal");el.innerHTML="";
+  var head=document.createElement("div");head.className="chead";
+  var prev=document.createElement("button");prev.type="button";prev.textContent=lang==="ar"?"›":"‹";prev.setAttribute("aria-label",tr("prevM"));
+  var next=document.createElement("button");next.type="button";next.textContent=lang==="ar"?"‹":"›";next.setAttribute("aria-label",tr("nextM"));
+  var title=document.createElement("span");title.textContent=new Intl.DateTimeFormat(loc(),{month:"long",year:"numeric"}).format(calMonth);
+  prev.onclick=function(){calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()-1,1);drawCal();};
+  next.onclick=function(){calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+1,1);drawCal();};
+  head.appendChild(prev);head.appendChild(title);head.appendChild(next);el.appendChild(head);
+  var grid=document.createElement("div");grid.className="cgrid";
+  tr("dow").forEach(function(n){var h=document.createElement("span");h.textContent=n;grid.appendChild(h);});
+  var y=calMonth.getFullYear(), m=calMonth.getMonth(), first=calMonth.getDay(), n=new Date(y,m+1,0).getDate();
+  for(var i=0;i<first;i++)grid.appendChild(document.createElement("span"));
+  for(let d=1;d<=n;d++){
+    var ds=y+"-"+pad(m+1)+"-"+pad(d), b=document.createElement("button");
+    b.type="button";b.className="cd"+(availFor(ds).length?" has":"");b.textContent=d;
+    b.setAttribute("aria-pressed",ds===calDay?"true":"false");
+    if(ds<dateEl.min)b.disabled=true;
+    b.onclick=function(){calDay=ds;pickedKey="";dateEl.value=ds;drawCal();};
+    grid.appendChild(b);
+  }
+  el.appendChild(grid);drawOpens();
+}
+function drawOpens(){
+  var el=document.getElementById("opens");el.innerHTML="";
+  var any=Object.keys(open).length>0;
+  var list=calDay?availFor(calDay):[];
+  if(!calDay||!list.length){
+    var t=document.createElement("p");t.className="hint";
+    t.textContent=!any?tr("hNone"):!calDay?tr("hPick"):tr("hDay");
+    el.appendChild(t);return;
+  }
+  var chips=document.createElement("div");chips.className="chips";
+  list.forEach(function(v){
+    var c=document.createElement("button");c.type="button";c.className="slot";c.textContent=v.time;
+    c.setAttribute("aria-pressed",pickedKey===v.key?"true":"false");
+    c.onclick=function(){pickedKey=v.key;dateEl.value=v.date;document.getElementById("time").value=v.time;drawOpens();};
+    chips.appendChild(c);
+  });
+  el.appendChild(chips);
+}
+applyLang();
+if(db){load().catch(function(){});setInterval(function(){load().catch(function(){});},30000);}
+</script>
+</body>
+</html>
