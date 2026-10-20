@@ -278,7 +278,7 @@ function drawOpens(){
   list.forEach(function(v){
     var c=document.createElement("button");c.type="button";c.className="slot";c.textContent=v.time;
     c.setAttribute("aria-pressed",pickedKey===v.key?"true":"false");
-    c.onclick=function(){pickedKey=v.key;dateEl.value=v.date;document.getElementById("time").value=v.time;drawOpens();};
+    c.onclick=function(){pickedKey=v.key;dateEl.value=v.date;document.getElementById("time").value=v.time;drawOpens();var n=document.getElementById("name");n.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(function(){try{n.focus({preventScroll:true});}catch(e){}},400);};
     chips.appendChild(c);
   });
   el.appendChild(chips);
