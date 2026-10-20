@@ -21,6 +21,7 @@ button.main{background:var(--green);border-color:var(--green);color:#fff;font-we
 .row a,.row button{display:inline-block;margin:8px 8px 0 0;padding:6px 12px;border-radius:8px;border:1.5px solid var(--line);color:var(--ink);text-decoration:none;font-size:.95rem}
 .add{display:flex;gap:8px;flex-wrap:wrap}.add input{flex:1 1 130px;width:auto;margin:0}
 .err{color:#C0392B;min-height:1.2em}
+@media (min-width:900px){main{max-width:1000px;padding-top:40px}#panel:not([hidden]){display:grid;grid-template-columns:1fr 1fr;gap:0 48px;align-items:start}#out{grid-column:1/-1;justify-self:start}}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -36,13 +37,13 @@ button.main{background:var(--green);border-color:var(--green);color:#fff;font-we
 </section>
 <section id="panel" hidden>
 <button id="out">Sign out</button>
-<h2>Open times</h2>
+<div><h2>Open times</h2>
 <p class="sub">Students see these in the calendar. Times use your device time zone.</p>
 <div class="add"><input id="od" type="date" aria-label="Date"><input id="ot" type="time" aria-label="Time"><button id="oadd">Add open time</button></div>
-<div id="olist"></div>
-<h2>Bookings</h2>
+<div id="olist"></div></div>
+<div><h2>Bookings</h2>
 <div id="blist"></div>
-<p class="err" id="perr"></p>
+<p class="err" id="perr"></p></div>
 </section>
 </main>
 <script src="config.js"></script>
